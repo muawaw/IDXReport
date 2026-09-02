@@ -1,0 +1,81 @@
+// Stock Data
+{
+    "BBCA.JK": {
+        "Industry": "Banks - Regional",
+        "IndustryKey": "banks-regional",
+        "Sector": "Financial Services",
+        "SectorKey": "financial-services",
+        "Code": "BBCA.JK",
+        "ShortName": "Bank Central Asia Tbk",
+        "LongName": "PT Bank Central Asia Tbk",
+        "Open": 6675.0,
+        "LastDividendValue": 25.0,
+        "LastDividendDate": 1788134400,
+        "DividendRate": 381.0,
+        "DividendYield": 5.77
+    },
+    "BBRI.JK": {
+        "Industry": "Banks - Regional",
+        "IndustryKey": "banks-regional",
+        "Sector": "Financial Services",
+        "SectorKey": "financial-services",
+        "Code": "BBRI.JK",
+        "ShortName": "Bank Rakyat Indonesia (Persero)",
+        "LongName": "PT Bank Rakyat Indonesia (Persero) Tbk",
+        "Open": 3390.0,
+        "LastDividendValue": 209.0,
+        "LastDividendDate": 1776729600,
+        "DividendRate": 418.0,
+        "DividendYield": 12.37
+    },
+    "TLKM.JK": {
+        "Industry": "Telecom Services",
+        "IndustryKey": "telecom-services",
+        "Sector": "Communication Services",
+        "SectorKey": "communication-services",
+        "Code": "TLKM.JK",
+        "ShortName": "Telkom Indonesia (Persero) Tbk.",
+        "LongName": "Perusahaan Perseroan (Persero) PT Telekomunikasi Indonesia Tbk",
+        "Open": 2600.0,
+        "LastDividendValue": 223.16588,
+        "LastDividendDate": 1781740800,
+        "DividendRate": 223.17,
+        "DividendYield": 8.55
+    }
+}
+
+// Dividend Data
+{
+    "BBCA.JK": {
+        "17-11-2021": 25.0,
+        "28-03-2022": 120.0,
+        "02-12-2022": 35.0,
+        "29-03-2023": 170.0,
+        "04-12-2023": 42.5,
+        "25-03-2024": 227.5,
+        "21-11-2024": 50.0,
+        "21-03-2025": 250.0,
+        "03-12-2025": 55.0,
+        "30-03-2026": 281.0,
+        "17-06-2026": 20.0,
+        "31-08-2026": 25.0
+    },
+    "BBRI.JK": {
+        "11-03-2022": 174.2515,
+        "10-01-2023": 57.0,
+        "24-03-2023": 231.22139,
+        "02-01-2024": 84.0,
+        "14-03-2024": 235.0,
+        "27-12-2024": 135.0,
+        "11-04-2025": 208.4,
+        "30-12-2025": 137.0,
+        "21-04-2026": 209.0
+    },
+    "TLKM.JK": {
+        "08-06-2022": 149.9656,
+        "12-06-2023": 167.5987,
+        "16-05-2024": 178.50418,
+        "11-06-2025": 212.4665,
+        "18-06-2026": 223.16588
+    }
+}
