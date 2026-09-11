@@ -30,6 +30,12 @@ DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 
 allowed_hosts_raw = os.getenv('ALLOWED_HOSTS', '')
 ALLOWED_HOSTS = [host.strip() for host in allowed_hosts_raw.split(',') if host.strip()]
+if not ALLOWED_HOSTS:
+    ALLOWED_HOSTS = ['*']  # Allows Render URL + Health Checks
+
+# Add STATIC_ROOT for collectstatic
+STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 
 # Application definition
