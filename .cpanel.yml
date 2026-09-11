@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/isthisit/public_html
+    - /usr/bin/rsync -avz --delete --filter=':- .gitignore' --exclude='.git*' ./ $DEPLOYPATH
