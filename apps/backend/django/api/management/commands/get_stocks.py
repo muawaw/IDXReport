@@ -1,11 +1,15 @@
 import yfinance as yf
-import json
-import requests
 import pandas as pd
+<<<<<<< HEAD
 from typing import List, Tuple, Dict, Any, Optional
 import os
+=======
+from typing import List, Dict, Any, Optional
+>>>>>>> 6875b589f16cf4e950b7f77270f0259a7fd45bad
 from pathlib import Path
+import time
 
+<<<<<<< HEAD
 from django.core.management.base import BaseCommand
 from django.db import transaction
 from api.models import Stock, Dividend
@@ -94,26 +98,109 @@ class StockDataFetcher:
                 print(f"Error fetching data for {ticker}: {e}")
                 not_listed_companies.append({"emiten": ticker, "error": str(e)})
                 
+=======
+from .filter_data import DataFiltering
+from helper.parse_date import parse_data_variable
+
+CSV_PATH = Path(__file__).resolve().parent / "list_idx.csv"
+
+class StockDataFetcher(DataFiltering):
+    def __init__(self):
+        super().__init__()
+    
+    def fetch_stock_data(self, tickers: Optional[List[str]], delay: float = 1.0) -> Dict[str, Any]:
+        """
+        Fetch stock data for the given tickers using yfinance.
+        """
+        raw_filtered_data, _ = self.read_data(dataset=CSV_PATH)  
+        
+        # Notes
+        # Unique listingBoard values:
+        # - Akselerasi
+        # - Ekonomi Baru
+        # - Pemantauan Khusus
+        # - Pengembangan
+        # - Utama 
+        
+        field_mapping = {
+            "regularMarketTime": "RegularMarketTime",   # Last Price Update DateTime (Unix Timestamp -> ISO)
+            "industry": "Industry",                     # Company Industry
+            "industryKey": "IndustryKey",               # Company Industry Key ID
+            "sector": "Sector",                         # Company Sector
+            "sectorKey": "SectorKey",                   # Company Sector Key ID
+            "symbol": "Code",                           # Company Ticker Symbol (e.g., BBCA.JK)
+            "shortName": "ShortName",                   # Company Short Name
+            "longName": "LongName",                     # Company Full Registered Name
+            "open": "Open",                             # Opening Stock Price
+            "previousClose": "Close",                   # Previous Market Closing Price
+            "dayLow": "Low",                            # Lowest Traded Price Today
+            "dayHigh": "High",                          # Highest Traded Price Today
+            "lastDividendValue": "LastDividendValue",   # Most Recent Dividend Payout Amount
+            "lastDividendDate": "LastDividendDate",     # Most Recent Dividend Date (Unix Timestamp -> ISO)
+            "dividendRate": "DividendRate",             # Annualized Dividend Rate
+            "dividendYield": "DividendYield",           # Dividend Yield Ratio (Price to Dividend Conversion)
+            "mostRecentQuarter": "MostRecentQuarter"    # Most Recent Quarterly Financial Report Date (Unix Timestamp -> ISO)
+        }
+        
+        start_time = time.time()
+        stock_data = {"^JKSE": {"Classification": {}}}
+        print(f"Processing Stock Data [{__name__}]")
+        
+        for board, ticker_list in raw_filtered_data["^JKSE"]["Classification"].items():
+            stock_data["^JKSE"]["Classification"][board] = {}
+            
+            for symbol in ticker_list:
+                try:
+                    stock = yf.Ticker(str(symbol))
+                    info = stock.info or {}
+                    
+                    processed_info = {
+                        target_key: parse_data_variable(info.get(source_key))
+                        for source_key, target_key in field_mapping.items()
+                    }
+                    processed_info["DividendHistory"] = self.get_dividend_data(symbol)
+                    stock_data["^JKSE"]["Classification"][board][symbol] = processed_info
+                    
+                    if delay > 0:
+                        time.sleep(delay)
+                    
+                except Exception as e:
+                    print(f"Error fetching data for {symbol}: {e}")
+                    
+        end_time = time.time()
+        elapsed_seconds = end_time - start_time
+        
+        hours, remainder = divmod(elapsed_seconds, 3600)
+        minutes, seconds = divmod(remainder, 60)
+        
+        total_fetched = sum(
+                    len(board_data) 
+                    for board_data in stock_data.get("^JKSE", {}).get("Classification", {}).values()
+                )
+        
+        print(f"Finish fetching data from yfinance {__name__}")
+        print(f"Total Fetched: {total_fetched}")
+        print(f"Time Elapsed: {int(hours)}h {int(minutes)}m {seconds:.2f}s (Total: {elapsed_seconds:.2f} seconds)")
+        if total_fetched > 0:
+            avg_speed = elapsed_seconds / total_fetched
+            print(f"Average Speed: {avg_speed:.2f} seconds per stock")
+        
+>>>>>>> 6875b589f16cf4e950b7f77270f0259a7fd45bad
         return stock_data
 
-    def get_dividend_data(self, tickers: List[str]) -> Dict[str, Any]:
+    def get_dividend_data(self, tickers: str) -> Dict[str, Any]:
         """
         Fetch dividend data for the given tickers using yfinance.
         """
-        
-        listed_companies, not_listed_companies = self.read_data(tickers)
-        
-        dividend_data = {}
-        for company in listed_companies:
-            ticker = company["emiten"]
-            try:
-                dividends = yf.Ticker(str(ticker)).get_dividends(period="5y")
+        try:
+            dividends = yf.Ticker(str(tickers)).get_dividends(period="5y")
+            if dividends is not None and not dividends.empty:
                 dividends.index = pd.to_datetime(dividends.index).strftime('%d-%m-%Y')
-                dividend_data[str(ticker)] = dividends.to_dict()
-            except Exception as e:
-                print(f"Error fetching dividend data for {ticker}: {e}")
-                not_listed_companies.append({"emiten": ticker, "error": str(e)}) 
+                return dividends.to_dict()
+        except Exception as e:
+            print(f"Error fetching dividend data for {self.tickers}: {e}") 
                 
+<<<<<<< HEAD
         return dividend_data   
     
 class Command(BaseCommand):
@@ -252,3 +339,7 @@ class Command(BaseCommand):
             
             self.stdout.write(self.style.NOTICE("Sample Output (1 record):"))
             self.stdout.write(json.dumps({sample_code: sample_payload}, indent=2, default=str))
+=======
+        return {}   
+        
+>>>>>>> 6875b589f16cf4e950b7f77270f0259a7fd45bad
